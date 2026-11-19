@@ -1,0 +1,2 @@
+- coast.jpg: File:Drone view of cliffs on coast (Unsplash).jpg — Sidharth Bhatia sidharthbhatia — CC0 — https://upload.wikimedia.org/wikipedia/commons/c/cd/Drone_view_of_cliffs_on_coast_%28Unsplash%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+- moto.jpg: File:Welcome to Douala.jpg — The Taxi Photographer — CC BY-SA 4.0 — https://upload.wikimedia.org/wikipedia/commons/c/ca/Welcome_to_Douala.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
