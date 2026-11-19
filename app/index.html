@@ -3,105 +3,55 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Golden Coast Cover Studio v2 — GTA 6 Cover Art Maker</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ff5e3a'/%3E%3Ctext x='16' y='23' font-family='sans-serif' font-size='16' font-weight='bold' text-anchor='middle' fill='%2312081f'%3EGC%3C/text%3E%3C/svg%3E">
+<title>Golden Coast Cover Studio v2 — GTA-style cover maker</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23ff2975'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="topbar">
-  <div class="brand">
-    <span class="brand-mark">GC</span>
-    <div>
-      <h1>Golden Coast Cover Studio <span class="v2">v2</span></h1>
-      <p class="tag">Turn your photos into GTA-style cover art — graded, panelled, ready to post.</p>
-    </div>
-  </div>
-  <div class="variants" id="variants" role="group" aria-label="Cover presets">
-    <button type="button" data-variant="sunset" class="variant active">Sunset Coast</button>
-    <button type="button" data-variant="neon" class="variant">Neon Nights</button>
-    <button type="button" data-variant="ink" class="variant">Ink City</button>
+  <div class="brand"><span class="logo">GOLDEN COAST</span><span class="sub">Cover Studio v2</span></div>
+  <div class="variants" id="variants" role="group" aria-label="Cover variants"></div>
+  <div class="top-actions">
+    <button id="undoBtn" type="button">Undo</button>
+    <button id="redoBtn" type="button">Redo</button>
+    <button id="exportBtn" type="button" class="primary">Export PNG</button>
   </div>
 </header>
-<main class="workspace">
+<main class="layout">
   <section class="stage">
-    <canvas id="cover" width="960" height="960"></canvas>
-    <p class="hint">Click a panel to select it &middot; drag to move the photo &middot; scroll to zoom &middot; double-click to reset the panel</p>
-    <div class="panelbar" id="panelbar" aria-label="Panels"></div>
+    <div class="canvas-wrap"><canvas id="preview" width="900" height="506"></canvas></div>
+    <p class="hint">Click a panel to select it &middot; Drag to move the photo &middot; Scroll to zoom &middot; Double-click to reset</p>
   </section>
   <aside class="editor">
-    <section class="group">
-      <h2>1 · Photos</h2>
+    <section class="group"><h2>Photos</h2>
+      <div class="thumbs" id="thumbs"></div>
       <div class="row">
-        <label class="btn file-btn">Add photos
-          <input type="file" id="addPhotos" accept="image/*" multiple hidden>
-        </label>
-        <button type="button" class="btn" id="fillAll">Fill all panels</button>
-        <button type="button" class="btn" id="spread">Spread one photo</button>
+        <label class="upload">Upload your photo<input type="file" id="upload" accept="image/*" hidden></label>
+        <button id="fillAllBtn" type="button">Fill all panels</button>
+        <button id="spreadBtn" type="button">Spread photos</button>
       </div>
-      <div class="samples" id="samples"></div>
-      <div class="tray" id="tray"></div>
     </section>
-    <section class="group">
-      <h2>2 · Layout</h2>
-      <div class="choices" id="layouts"></div>
+    <section class="group"><h2>Layout</h2><div class="btns" id="layouts"></div></section>
+    <section class="group"><h2>Colour grade</h2><div class="btns" id="grades"></div>
+      <label class="slider">Grade strength <span id="strengthVal">85</span><input type="range" id="strength" min="0" max="100" value="85"></label>
+      <label class="slider">Halftone <span id="halftoneVal">50</span><input type="range" id="halftone" min="0" max="100" value="50"></label>
+      <label class="slider">Contrast <span id="contrastVal">55</span><input type="range" id="contrast" min="0" max="100" value="55"></label>
+      <label class="slider">Saturation <span id="saturationVal">60</span><input type="range" id="saturation" min="0" max="100" value="60"></label>
+      <label class="slider">Grain <span id="grainVal">25</span><input type="range" id="grain" min="0" max="100" value="25"></label>
+      <label class="slider">Vignette <span id="vignetteVal">30</span><input type="range" id="vignette" min="0" max="100" value="30"></label>
     </section>
-    <section class="group">
-      <h2>3 · Grade <span class="note">— applied to every photo</span></h2>
-      <div class="choices" id="grades"></div>
-      <label class="slider">Grade strength <span id="gradeStrengthVal">100%</span>
-        <input type="range" id="gradeStrength" min="0" max="100" value="100">
-      </label>
-      <label class="slider">Halftone <span id="halftoneVal">40%</span>
-        <input type="range" id="halftone" min="0" max="100" value="40">
-      </label>
-      <label class="slider">Contrast <span id="contrastVal">115%</span>
-        <input type="range" id="contrast" min="50" max="160" value="115">
-      </label>
-      <label class="slider">Saturation <span id="saturationVal">125%</span>
-        <input type="range" id="saturation" min="0" max="200" value="125">
-      </label>
-      <label class="slider">Grain <span id="grainVal">12%</span>
-        <input type="range" id="grain" min="0" max="60" value="12">
-      </label>
-      <label class="slider">Vignette <span id="vignetteVal">25%</span>
-        <input type="range" id="vignette" min="0" max="80" value="25">
-      </label>
+    <section class="group"><h2>Caption</h2>
+      <label class="field">Title <input type="text" id="title" value="GOLDEN COAST" maxlength="24"></label>
+      <label class="field">Subtitle <input type="text" id="subtitle" value="Vice City Stories" maxlength="40"></label>
+      <label class="field">Tagline <input type="text" id="tagline" value="Sun, sand and trouble." maxlength="48"></label>
+      <label class="field">Quote <input type="text" id="quote" value="The city never sleeps. Neither do we." maxlength="64"></label>
     </section>
-    <section class="group">
-      <h2>4 · Captions</h2>
-      <label class="field">Title
-        <input type="text" id="capTitle" value="GOLDEN COAST" maxlength="24">
-      </label>
-      <label class="field">Subtitle
-        <input type="text" id="capSubtitle" value="Neon Nights" maxlength="32">
-      </label>
-      <label class="field">Tagline
-        <input type="text" id="capTagline" value="VICE CITY · SUNSET · NO RULES" maxlength="48">
-      </label>
-      <label class="field">Quote
-        <input type="text" id="capQuote" value="The coast is calling." maxlength="64">
-      </label>
-    </section>
-    <section class="group">
-      <h2>5 · Export</h2>
-      <div class="choices" id="sizes">
-        <button type="button" data-size="1080x1080" class="choice active">1080 × 1080</button>
-        <button type="button" data-size="1080x1350" class="choice">1080 × 1350</button>
-        <button type="button" data-size="1920x1080" class="choice">1920 × 1080</button>
-      </div>
-      <div class="row">
-        <button type="button" class="btn primary" id="exportPng">Export PNG</button>
-        <button type="button" class="btn" id="exportAll">Export all 3</button>
-      </div>
-      <div class="row">
-        <button type="button" class="btn" id="undoBtn">Undo</button>
-        <button type="button" class="btn" id="redoBtn">Redo</button>
-        <span class="status" id="status"></span>
-      </div>
+    <section class="group"><h2>Size &amp; export</h2>
+      <div class="btns" id="sizes"></div>
+      <div class="row"><button id="exportAllBtn" type="button">Export all sizes</button></div>
     </section>
   </aside>
 </main>
-<script src="src/cover.js"></script>
-<script src="src/main.js"></script>
+<script type="module" src="src/main.js"></script>
 </body>
 </html>
