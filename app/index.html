@@ -1,54 +1,63 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Golden Coast Cover Studio v2 — GTA-style cover maker</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23ff2975'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff2e88'/%3E%3Ctext x='16' y='23' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'%3EG%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="topbar">
-  <div class="brand"><span class="logo">GOLDEN COAST</span><span class="sub">Cover Studio v2</span></div>
-  <div class="variants" id="variants" role="group" aria-label="Cover variants"></div>
+  <div class="brand"><span class="brand-mark">GC</span><span class="brand-name">Golden Coast Cover Studio <b>v2</b></span></div>
+  <div class="variants" id="variants"></div>
   <div class="top-actions">
-    <button id="undoBtn" type="button">Undo</button>
-    <button id="redoBtn" type="button">Redo</button>
+    <button id="undoBtn" type="button" title="Undo">Undo</button>
+    <button id="redoBtn" type="button" title="Redo">Redo</button>
     <button id="exportBtn" type="button" class="primary">Export PNG</button>
   </div>
 </header>
 <main class="layout">
   <section class="stage">
-    <div class="canvas-wrap"><canvas id="preview" width="900" height="506"></canvas></div>
-    <p class="hint">Click a panel to select it &middot; Drag to move the photo &middot; Scroll to zoom &middot; Double-click to reset</p>
+    <canvas id="preview" width="960" height="540"></canvas>
+    <p class="stage-hint">Drag a panel to move its photo &middot; scroll to zoom &middot; double-click to reset &middot; click a panel to select it</p>
   </section>
   <aside class="editor">
-    <section class="group"><h2>Photos</h2>
+    <section class="group" id="photoGroup">
+      <h2>Photo</h2>
       <div class="thumbs" id="thumbs"></div>
       <div class="row">
-        <label class="upload">Upload your photo<input type="file" id="upload" accept="image/*" hidden></label>
-        <button id="fillAllBtn" type="button">Fill all panels</button>
-        <button id="spreadBtn" type="button">Spread photos</button>
+        <label class="upload">Upload photo<input id="upload" type="file" accept="image/*"></label>
+        <button id="fillAllBtn" type="button">Fill all</button>
+        <button id="spreadBtn" type="button">Spread</button>
       </div>
+      <p class="note">Selected panel: <b id="selPanel">1</b></p>
     </section>
-    <section class="group"><h2>Layout</h2><div class="btns" id="layouts"></div></section>
-    <section class="group"><h2>Colour grade</h2><div class="btns" id="grades"></div>
-      <label class="slider">Grade strength <span id="strengthVal">85</span><input type="range" id="strength" min="0" max="100" value="85"></label>
-      <label class="slider">Halftone <span id="halftoneVal">50</span><input type="range" id="halftone" min="0" max="100" value="50"></label>
-      <label class="slider">Contrast <span id="contrastVal">55</span><input type="range" id="contrast" min="0" max="100" value="55"></label>
-      <label class="slider">Saturation <span id="saturationVal">60</span><input type="range" id="saturation" min="0" max="100" value="60"></label>
-      <label class="slider">Grain <span id="grainVal">25</span><input type="range" id="grain" min="0" max="100" value="25"></label>
-      <label class="slider">Vignette <span id="vignetteVal">30</span><input type="range" id="vignette" min="0" max="100" value="30"></label>
+    <section class="group">
+      <h2>Layout</h2>
+      <div class="btn-grid" id="layouts"></div>
     </section>
-    <section class="group"><h2>Caption</h2>
-      <label class="field">Title <input type="text" id="title" value="GOLDEN COAST" maxlength="24"></label>
-      <label class="field">Subtitle <input type="text" id="subtitle" value="Vice City Stories" maxlength="40"></label>
-      <label class="field">Tagline <input type="text" id="tagline" value="Sun, sand and trouble." maxlength="48"></label>
-      <label class="field">Quote <input type="text" id="quote" value="The city never sleeps. Neither do we." maxlength="64"></label>
+    <section class="group">
+      <h2>Grade</h2>
+      <div class="btn-grid" id="grades"></div>
+      <label class="slider">Grade strength <span id="strengthVal">80%</span><input id="strength" type="range" min="0" max="100" value="80"></label>
+      <label class="slider">Halftone <span id="halftoneVal">55%</span><input id="halftone" type="range" min="0" max="100" value="55"></label>
+      <label class="slider">Contrast <span id="contrastVal">15%</span><input id="contrast" type="range" min="-50" max="50" value="15"></label>
+      <label class="slider">Saturation <span id="saturationVal">20%</span><input id="saturation" type="range" min="-50" max="80" value="20"></label>
+      <label class="slider">Grain <span id="grainVal">25%</span><input id="grain" type="range" min="0" max="100" value="25"></label>
+      <label class="slider">Vignette <span id="vignetteVal">30%</span><input id="vignette" type="range" min="0" max="100" value="30"></label>
     </section>
-    <section class="group"><h2>Size &amp; export</h2>
-      <div class="btns" id="sizes"></div>
-      <div class="row"><button id="exportAllBtn" type="button">Export all sizes</button></div>
+    <section class="group">
+      <h2>Caption</h2>
+      <label class="field">Title<input id="title" type="text" value="GOLDEN COAST" maxlength="24"></label>
+      <label class="field">Subtitle<input id="subtitle" type="text" value="a Vice City story" maxlength="40"></label>
+      <label class="field">Tagline<input id="tagline" type="text" value="Sunsets, speed &amp; second chances" maxlength="48"></label>
+      <label class="field">Quote<input id="quote" type="text" value="&ldquo;The coast never looked this good.&rdquo;" maxlength="64"></label>
+    </section>
+    <section class="group">
+      <h2>Size &amp; export</h2>
+      <div class="btn-grid" id="sizes"></div>
+      <button id="exportAllBtn" type="button" class="primary wide">Export all 3 sizes</button>
     </section>
   </aside>
 </main>
